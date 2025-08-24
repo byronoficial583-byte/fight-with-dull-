@@ -1,0 +1,48 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class FirstPersonController : MonoBehaviour
+{
+    [Header("Movimiento")]
+    public float speed = 5f;
+    public float lookSpeed = 2f;
+
+    private CharacterController controller;
+    private Vector2 moveInput;
+    private Vector2 lookInput;
+
+    private float xRotation = 0f;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+        Cursor.lockState = CursorLockMode.Locked; // Bloquea el cursor
+    }
+
+    void Update()
+    {
+        Move();
+        Look();
+    }
+
+    // Método para recibir el input del joystick
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        lookInput = context.ReadValue<Vector2>();
+    }
+
+    void Move()
+    {
+        // Movimiento relativo a la dirección que mira el personaje
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        controller.Move(move * speed * Time.deltaTime);
+    }
+
+    void Look()
+    {
+        //
